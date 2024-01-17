@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Validation</title>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<form id="registrationForm">
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email">
+  <span id="emailError" class="error"></span>
+
+  <br>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password">
+  <span id="passwordError" class="error"></span>
+
+  <br>
+
+  <label for="confirmPassword">Confirm Password:</label>
+  <input type="password" id="confirmPassword" name="confirmPassword">
+  <span id="confirmPasswordError" class="error"></span>
+
+  <br>
+
+  <button type="button" onclick="validateForm()">Submit</button>
+</form>
+
+<script>
+  function validateForm() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Validate email
+    if (!emailRegex.test(email)) {
+      emailError.textContent = 'Invalid email address';
+    } else {
+      emailError.textContent = '';
+    }
+
+    // Validate password
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      passwordError.textContent = 'Password must meet complexity requirements';
+    } else {
+      passwordError.textContent = '';
+    }
+
+    // Confirm password
+    if (password !== confirmPassword) {
+      confirmPasswordError.textContent = 'Passwords do not match';
+    } else {
+      confirmPasswordError.textContent = '';
+    }
+  }
+</script>
+
+</body>
+</html>
