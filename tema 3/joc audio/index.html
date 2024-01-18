@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio Memory Game</title>
+  <style>
+    button {
+      font-size: 18px;
+      padding: 10px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Audio Memory Game</h1>
+<button onclick="startGame()">Start Game</button>
+<button onclick="resetGame()">Reset Game</button>
+
+<script>
+  const audioFiles = [
+    'sound1.mp3',
+    'sound2.mp3',
+    'sound3.mp3',
+  ];
+
+  let sequence = [];
+  let userSequence = [];
+  let level = 1;
+  let playing = false;
+
+  function playSequence() {
+    playing = true;
+    userSequence = [];
+
+    for (let i = 0; i < level; i++) {
+      const randomIndex = Math.floor(Math.random() * audioFiles.length);
+      const audio = new Audio(audioFiles[randomIndex]);
+
+      setTimeout(() => {
+        audio.play();
+      }, i * 1000);
+    }
+
+    setTimeout(() => {
+      playing = false;
+    }, level * 1000);
+  }
+
+  function startGame() {
+    if (!playing) {
+      sequence = [];
+      level = 1;
+      playNextLevel();
+    }
+  }
+
+  function resetGame() {
+    sequence = [];
+    level = 1;
+    playing = false;
+  }
+
+  function playNextLevel() {
+    playSequence();
+    level++;
+  }
+
+  function checkUserInput() {
+    if (!playing) {
+      const buttonClicked = event.target;
+      const buttonIndex = Number(buttonClicked.dataset.index);
+
+      userSequence.push(buttonIndex);
+
+      if (userSequence.length === sequence.length) {
+        if (userSequence.every((value, index) => value === sequence[index])) {
+          playNextLevel();
+        } else {
+          alert('Wrong sequence! Game over.');
+          resetGame();
+        }
+      }
+    }
+  }
+
+  const buttonsContainer = document.createElement('div');
+  buttonsContainer.id = 'buttonsContainer';
+
+  audioFiles.forEach((sound, index) => {
+    const button = document.createElement('button');
+    button.textContent = `Sound ${index + 1}`;
+    button.dataset.index = index;
+    button.onclick = checkUserInput;
+
+    buttonsContainer.appendChild(button);
+  });
+
+  document.body.appendChild(buttonsContainer);
+</script>
+
+</body>
+</html>

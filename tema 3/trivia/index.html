@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trivia Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #quiz-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .options {
+      list-style-type: none;
+      padding: 0;
+    }
+    .options li {
+      margin: 10px 0;
+    }
+    button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div id="quiz-container">
+  <h1>Trivia Game</h1>
+  <div id="question-container" class="question"></div>
+  <ul id="options-container" class="options"></ul>
+  <button onclick="nextQuestion()">Next Question</button>
+</div>
+
+<script>
+  const questions = [
+    {
+      question: 'What is the capital of France?',
+      options: ['Berlin', 'Madrid', 'Paris', 'Rome'],
+      correctAnswer: 'Paris'
+    },
+    {
+      question: 'Which planet is known as the Red Planet?',
+      options: ['Earth', 'Mars', 'Jupiter', 'Venus'],
+      correctAnswer: 'Mars'
+    },
+    {
+      question: 'What is the largest mammal in the world?',
+      options: ['Elephant', 'Blue Whale', 'Giraffe', 'Hippopotamus'],
+      correctAnswer: 'Blue Whale'
+    }
+  ];
+
+  let currentQuestionIndex = 0;
+  let score = 0;
+
+  function showQuestion() {
+    const currentQuestion = questions[currentQuestionIndex];
+    const questionContainer = document.getElementById('question-container');
+    const optionsContainer = document.getElementById('options-container');
+
+    questionContainer.textContent = currentQuestion.question;
+
+    optionsContainer.innerHTML = '';
+    currentQuestion.options.forEach((option, index) => {
+      const li = document.createElement('li');
+      li.textContent = option;
+      li.onclick = () => checkAnswer(option);
+      optionsContainer.appendChild(li);
+    });
+  }
+
+  function checkAnswer(selectedAnswer) {
+    const currentQuestion = questions[currentQuestionIndex];
+
+    if (selectedAnswer === currentQuestion.correctAnswer) {
+      score++;
+    }
+
+    if (currentQuestionIndex < questions.length - 1) {
+      currentQuestionIndex++;
+      showQuestion();
+    } else {
+      endGame();
+    }
+  }
+
+  function nextQuestion() {
+    if (currentQuestionIndex < questions.length - 1) {
+      currentQuestionIndex++;
+      showQuestion();
+    } else {
+      endGame();
+    }
+  }
+
+  function endGame() {
+    const quizContainer = document.getElementById('quiz-container');
+    quizContainer.innerHTML = `
+      <h1>Trivia Game</h1>
+      <p>Your score: ${score} out of ${questions.length}</p>
+      <button onclick="restartGame()">Restart Game</button>
+    `;
+  }
+
+  function restartGame() {
+    currentQuestionIndex = 0;
+    score = 0;
+    showQuestion();
+  }
+
+  showQuestion();
+</script>
+
+</body>
+</html>
